@@ -6,6 +6,8 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  browserLocalPersistence,
+  setPersistence,
 } from 'firebase/auth'
 import {
   getFirestore,
@@ -29,6 +31,9 @@ const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
 
 export const auth = getAuth(app)
 export const db   = getFirestore(app)
+
+// Keep user logged in across browser sessions
+setPersistence(auth, browserLocalPersistence)
 
 // ── AUTH ─────────────────────────────────────────────────
 
