@@ -227,7 +227,7 @@ export default function Dashboard() {
     if (!rName.trim()) return
     const nr = { id: Date.now(), name: rName, desc: rDesc || 'Custom routine', tasks: { morning:[], afternoon:[], evening:[] } }
     update(s => ({ ...s, routines: [...s.routines, nr] }))
-    setRoutineIdx(state.routines.length)
+    setRoutineIdx(s => s)
     setRoutineModal(false); setRName(''); setRDesc('')
     toast_(`"${rName}" created! 🎉`)
   }
@@ -680,7 +680,7 @@ export default function Dashboard() {
       {/* NEW ROUTINE MODAL */}
       {routineModal && (
         <Modal onClose={()=>setRoutineModal(false)} title={<>CREATE <span style={{color:'var(--accent)'}}>ROUTINE</span></>}>
-          <div style={{marginBottom:10}}><label style={S.lbl}>Routine Name *</label><input style={S.inp} value={rName} onChange={e=>setRName(e.target.value)} placeholder="Gym Day" /></div>
+          <div style={{marginBottom:10}}><label style={S.lbl}>Routine Name *</label><input style={S.inp} value={rName} onChange={e=>setRName(e.target.value)} autoFocus placeholder="Gym Day" /></div>
           <div><label style={S.lbl}>Description</label><input style={S.inp} value={rDesc} onChange={e=>setRDesc(e.target.value)} placeholder="What's this for?" /></div>
           <div style={{display:'flex',gap:8,justifyContent:'flex-end',marginTop:18}}>
             <button style={S.btnSec} onClick={()=>setRoutineModal(false)}>Cancel</button>
