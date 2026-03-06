@@ -260,15 +260,15 @@ export default function Dashboard() {
 
   // ── STYLES ──────────────────────────────────────────────
   const S = {
-    card:   { background:'var(--surface)', border:'1px solid var(--border)', borderRadius:12, padding:20 },
-    sec:    { fontFamily:'Bebas Neue', fontSize:16, letterSpacing:1.5, color:'var(--muted)', marginBottom:10 },
-    btn:    { background:'var(--accent)', color:'var(--bg)', border:'none', borderRadius:8, padding:'8px 16px', fontWeight:600, fontSize:13, cursor:'pointer', fontFamily:'inherit' },
-    btnSec: { background:'var(--surface2)', color:'var(--text)', border:'1px solid var(--border)', borderRadius:8, padding:'8px 16px', fontWeight:600, fontSize:13, cursor:'pointer', fontFamily:'inherit' },
-    btnDng: { background:'#f87171', color:'#fff', border:'none', borderRadius:8, padding:'8px 16px', fontWeight:600, fontSize:13, cursor:'pointer', fontFamily:'inherit' },
-    btnGh:  { background:'transparent', color:'var(--accent)', border:'1px solid rgba(var(--accent-rgb),0.4)', borderRadius:8, padding:'5px 11px', fontWeight:600, fontSize:11, cursor:'pointer', fontFamily:'inherit' },
-    inp:    { background:'var(--surface2)', border:'1px solid var(--border)', borderRadius:8, color:'var(--text)', padding:'9px 13px', fontSize:13, outline:'none', width:'100%', fontFamily:'inherit' },
-    tag:    { display:'inline-block', background:'rgba(var(--accent-rgb),0.12)', color:'var(--accent)', fontSize:9, fontWeight:600, padding:'2px 6px', borderRadius:3, textTransform:'uppercase' },
-    lbl:    { fontSize:10, color:'var(--muted)', display:'block', marginBottom:5 },
+    card:   { background:'var(--surface)', border:'1px solid var(--border)', borderRadius:12, padding:24 },
+    sec:    { fontFamily:'Bebas Neue', fontSize:20, letterSpacing:1.5, color:'var(--muted)', marginBottom:12 },
+    btn:    { background:'var(--accent)', color:'var(--bg)', border:'none', borderRadius:8, padding:'10px 20px', fontWeight:600, fontSize:15, cursor:'pointer', fontFamily:'inherit' },
+    btnSec: { background:'var(--surface2)', color:'var(--text)', border:'1px solid var(--border)', borderRadius:8, padding:'10px 20px', fontWeight:600, fontSize:15, cursor:'pointer', fontFamily:'inherit' },
+    btnDng: { background:'#f87171', color:'#fff', border:'none', borderRadius:8, padding:'10px 20px', fontWeight:600, fontSize:15, cursor:'pointer', fontFamily:'inherit' },
+    btnGh:  { background:'transparent', color:'var(--accent)', border:'1px solid rgba(var(--accent-rgb),0.4)', borderRadius:8, padding:'7px 14px', fontWeight:600, fontSize:13, cursor:'pointer', fontFamily:'inherit' },
+    inp:    { background:'var(--surface2)', border:'1px solid var(--border)', borderRadius:8, color:'var(--text)', padding:'11px 15px', fontSize:15, outline:'none', width:'100%', fontFamily:'inherit' },
+    tag:    { display:'inline-block', background:'rgba(var(--accent-rgb),0.12)', color:'var(--accent)', fontSize:11, fontWeight:600, padding:'3px 8px', borderRadius:3, textTransform:'uppercase' },
+    lbl:    { fontSize:13, color:'var(--muted)', display:'block', marginBottom:6 },
   }
 
   // ── LOADING ─────────────────────────────────────────────
@@ -295,7 +295,7 @@ export default function Dashboard() {
             <p style={{ color:'var(--muted)', fontSize:12, marginTop:4 }}>Stack the wins. Every day counts.</p>
           </div>
           <div style={{ display:'flex', gap:10, alignItems:'center' }}>
-            <span style={{ fontFamily:'JetBrains Mono', fontSize:10, color:'var(--muted)', background:'var(--surface)', border:'1px solid var(--border)', padding:'6px 12px', borderRadius:6 }}>
+            <span style={{ fontFamily:'JetBrains Mono', fontSize:13, color:'var(--muted)', background:'var(--surface)', border:'1px solid var(--border)', padding:'6px 12px', borderRadius:6 }}>
               {new Date().toLocaleDateString('en-IN',{weekday:'short',month:'short',day:'numeric'})}
             </span>
             <button style={S.btnDng} onClick={resetProgress}>↺ Reset</button>
@@ -309,9 +309,9 @@ export default function Dashboard() {
             { label:'Total XP',    val:state.xp,                color:'#6ee7b7',       sub:'experience points' },
           ].map(c => (
             <div key={c.label} style={S.card}>
-              <div style={{fontSize:10,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5,marginBottom:5}}>{c.label}</div>
+              <div style={{fontSize:15,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5,marginBottom:5}}>{c.label}</div>
               <div style={{fontFamily:'Bebas Neue',fontSize:38,color:c.color,lineHeight:1}}>{c.val}</div>
-              <div style={{fontSize:10,color:'var(--muted)',marginTop:3}}>{c.sub}</div>
+              <div style={{fontSize:15,color:'var(--muted)',marginTop:3}}>{c.sub}</div>
             </div>
           ))}
         </div>
@@ -322,9 +322,9 @@ export default function Dashboard() {
             <div key={c.id} onClick={()=>toggleChallenge(c.id)}
               style={{...S.card, display:'flex', alignItems:'center', gap:12, cursor:'pointer', opacity:c.done?0.45:1, padding:'13px 16px', borderColor:c.done?'#6ee7b7':'var(--border)'}}>
               <span style={{fontSize:18,width:28,textAlign:'center'}}>{c.icon}</span>
-              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:15,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
               <span style={S.tag}>+{c.xp} XP</span>
-              <div style={{width:20,height:20,borderRadius:'50%',border:`2px solid ${c.done?'#6ee7b7':'var(--border)'}`,background:c.done?'#6ee7b7':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:'#000'}}>{c.done?'✓':''}</div>
+              <div style={{width:20,height:20,borderRadius:'50%',border:`2px solid ${c.done?'#6ee7b7':'var(--border)'}`,background:c.done?'#6ee7b7':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,color:'#000'}}>{c.done?'✓':''}</div>
             </div>
           ))}
         </div>
@@ -336,8 +336,8 @@ export default function Dashboard() {
             <div key={h.id} onClick={()=>toggleHabit(h.id)}
               style={{...S.card,textAlign:'center',cursor:'pointer',borderColor:h.done?'var(--accent)':'var(--border)',padding:14}}>
               <div style={{fontSize:22,marginBottom:5}}>{h.emoji}</div>
-              <div style={{fontSize:11,fontWeight:600}}>{h.name}</div>
-              <div style={{fontSize:9,color:'var(--muted)',marginTop:2,fontFamily:'JetBrains Mono'}}>🔥 {h.done?h.streak+1:h.streak}d</div>
+              <div style={{fontSize:16,fontWeight:600}}>{h.name}</div>
+              <div style={{fontSize:12,color:'var(--muted)',marginTop:2,fontFamily:'JetBrains Mono'}}>🔥 {h.done?h.streak+1:h.streak}d</div>
             </div>
           ))}
         </div>
@@ -354,15 +354,15 @@ export default function Dashboard() {
             const c = state.challenges.find(x=>x.slot===sl.key&&!x.done) || state.challenges.find(x=>x.slot===sl.key)
             return (
               <div key={sl.key} style={S.card}>
-                <div style={{fontSize:10,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5,marginBottom:10}}>{sl.icon} {sl.label}</div>
+                <div style={{fontSize:15,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5,marginBottom:10}}>{sl.icon} {sl.label}</div>
                 {c && <>
                   <div style={{fontSize:20,marginBottom:5}}>{c.icon}</div>
-                  <div style={{fontWeight:600,fontSize:13,marginBottom:4}}>{c.name}</div>
-                  <div style={{fontSize:10,color:'var(--muted)',marginBottom:10}}>{c.why}</div>
+                  <div style={{fontWeight:600,fontSize:15,marginBottom:4}}>{c.name}</div>
+                  <div style={{fontSize:15,color:'var(--muted)',marginBottom:10}}>{c.why}</div>
                   <div style={{display:'flex',gap:6,alignItems:'center'}}>
                     <span style={S.tag}>+{c.xp} XP</span>
-                    {c.done ? <span style={{color:'#6ee7b7',fontSize:10,fontWeight:600}}>✓ Done!</span>
-                      : <button style={{...S.btn,padding:'3px 10px',fontSize:10}} onClick={()=>toggleChallenge(c.id)}>Complete</button>}
+                    {c.done ? <span style={{color:'#6ee7b7',fontSize:15,fontWeight:600}}>✓ Done!</span>
+                      : <button style={{...S.btn,padding:'3px 10px',fontSize:13}} onClick={()=>toggleChallenge(c.id)}>Complete</button>}
                   </div>
                 </>}
               </div>
@@ -375,10 +375,10 @@ export default function Dashboard() {
             <div key={c.id} onClick={()=>toggleChallenge(c.id)}
               style={{...S.card,display:'flex',alignItems:'center',gap:12,cursor:'pointer',opacity:c.done?0.4:1,padding:'13px 16px',borderColor:c.done?'#6ee7b7':'var(--border)'}}>
               <span style={{fontSize:18,width:28,textAlign:'center'}}>{c.icon}</span>
-              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
-              <span style={{fontFamily:'JetBrains Mono',fontSize:9,color:'var(--muted)',background:'var(--surface2)',padding:'3px 6px',borderRadius:4}}>{c.time}</span>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:15,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
+              <span style={{fontFamily:'JetBrains Mono',fontSize:12,color:'var(--muted)',background:'var(--surface2)',padding:'3px 6px',borderRadius:4}}>{c.time}</span>
               <span style={S.tag}>+{c.xp} XP</span>
-              <div style={{width:20,height:20,borderRadius:'50%',border:`2px solid ${c.done?'#6ee7b7':'var(--border)'}`,background:c.done?'#6ee7b7':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:'#000'}}>{c.done?'✓':''}</div>
+              <div style={{width:20,height:20,borderRadius:'50%',border:`2px solid ${c.done?'#6ee7b7':'var(--border)'}`,background:c.done?'#6ee7b7':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,color:'#000'}}>{c.done?'✓':''}</div>
             </div>
           ))}
         </div>
@@ -391,22 +391,22 @@ export default function Dashboard() {
     return (
       <div>
         <h1 style={{fontFamily:'Bebas Neue',fontSize:46,lineHeight:1,letterSpacing:2,marginBottom:4}}>HABIT <span style={{color:'var(--accent)'}}>TRACKER</span></h1>
-        <p style={{color:'var(--muted)',fontSize:12,marginBottom:24}}>Right-click any habit to edit or delete it.</p>
+        <p style={{color:'var(--muted)',fontSize:16,marginBottom:24}}>Right-click any habit to edit or delete it.</p>
         <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:9,marginBottom:20}}>
           {state.habits.map(h => (
             <div key={h.id} onClick={()=>toggleHabit(h.id)}
               onContextMenu={e=>{e.preventDefault();setHabitModal(h);setHabitForm({name:h.name,emoji:h.emoji})}}
               style={{...S.card,textAlign:'center',cursor:'pointer',position:'relative',borderColor:h.done?'var(--accent)':'var(--border)',padding:14}}>
-              {h.done && <div style={{position:'absolute',top:7,right:7,fontSize:11,color:'var(--accent)'}}>✓</div>}
+              {h.done && <div style={{position:'absolute',top:7,right:7,fontSize:15,color:'var(--accent)'}}>✓</div>}
               <div style={{fontSize:24,marginBottom:5}}>{h.emoji}</div>
-              <div style={{fontSize:11,fontWeight:600}}>{h.name}</div>
-              <div style={{fontSize:9,color:'var(--muted)',marginTop:2,fontFamily:'JetBrains Mono'}}>🔥 {h.done?h.streak+1:h.streak}d</div>
+              <div style={{fontSize:16,fontWeight:600}}>{h.name}</div>
+              <div style={{fontSize:12,color:'var(--muted)',marginTop:2,fontFamily:'JetBrains Mono'}}>🔥 {h.done?h.streak+1:h.streak}d</div>
             </div>
           ))}
           <div onClick={()=>{setHabitModal({id:null});setHabitForm({name:'',emoji:''})}}
             style={{...S.card,textAlign:'center',cursor:'pointer',border:'1px dashed var(--border)',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:4,padding:14}}>
-            <div style={{fontSize:22,color:'var(--muted)'}}>+</div>
-            <div style={{fontSize:10,color:'var(--muted)',fontWeight:600}}>Add Habit</div>
+            <div style={{fontSize:26,color:'var(--muted)'}}>+</div>
+            <div style={{fontSize:15,color:'var(--muted)',fontWeight:600}}>Add Habit</div>
           </div>
         </div>
         <hr style={{border:'none',borderTop:'1px solid var(--border)',margin:'20px 0'}}/>
@@ -416,7 +416,7 @@ export default function Dashboard() {
           {label:'Avg Streak',val:`${Math.round(state.habits.reduce((a,h)=>a+h.streak,0)/state.habits.length)}d`,pct:Math.min(100,Math.round(state.habits.reduce((a,h)=>a+h.streak,0)/state.habits.length/14*100)),color:'#fbbf24'},
         ].map(p => (
           <div key={p.label} style={{marginBottom:16}}>
-            <div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:4}}><span>{p.label}</span><span style={{color:p.color,fontFamily:'JetBrains Mono'}}>{p.val}</span></div>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:16,marginBottom:4}}><span>{p.label}</span><span style={{color:p.color,fontFamily:'JetBrains Mono'}}>{p.val}</span></div>
             <div style={{background:'var(--border)',borderRadius:5,height:6}}><div style={{width:`${p.pct}%`,background:p.color,borderRadius:5,height:6,transition:'width 0.5s'}}></div></div>
           </div>
         ))}
@@ -440,17 +440,17 @@ export default function Dashboard() {
           </div>
           <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
             {[['Push-ups','3','15','0'],['Pull-ups','3','10','0'],['Squat','4','8','60'],['Deadlift','3','5','80'],['Plank','3','60s','0'],['OHP','3','8','40']].map(([n,s,r,w])=>(
-              <button key={n} style={{...S.btnSec,fontSize:10,padding:'4px 10px'}} onClick={()=>setWForm({name:n,sets:s,reps:r,weight:w})}>{n}</button>
+              <button key={n} style={{...S.btnSec,fontSize:13,padding:'6px 12px'}} onClick={()=>setWForm({name:n,sets:s,reps:r,weight:w})}>{n}</button>
             ))}
           </div>
         </div>
         <div style={S.card}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
             <div style={S.sec}>TODAY'S SESSION</div>
-            {state.workouts.length>0 && <span style={{fontFamily:'JetBrains Mono',fontSize:10,color:'var(--muted)'}}>{state.workouts.length} exercises · {totalSets} sets</span>}
+            {state.workouts.length>0 && <span style={{fontFamily:'JetBrains Mono',fontSize:15,color:'var(--muted)'}}>{state.workouts.length} exercises · {totalSets} sets</span>}
           </div>
           {!state.workouts.length
-            ? <div style={{textAlign:'center',padding:30,color:'var(--muted)',fontSize:12}}>No exercises yet. Add your first set above.</div>
+            ? <div style={{textAlign:'center',padding:30,color:'var(--muted)',fontSize:14}}>No exercises yet. Add your first set above.</div>
             : state.workouts.map(w => (
               <div key={w.id} style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr auto',gap:8,padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
                 <span style={{fontWeight:500,fontSize:13}}>{w.name}</span>
@@ -489,9 +489,9 @@ export default function Dashboard() {
           <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
             <div>
               <div style={{fontSize:17,fontWeight:600}}>{routine.name}</div>
-              <div style={{fontSize:11,color:'var(--muted)'}}>{routine.desc}</div>
+              <div style={{fontSize:15,color:'var(--muted)'}}>{routine.desc}</div>
             </div>
-            {state.routines.length>1 && <button style={{...S.btnDng,marginLeft:'auto',fontSize:10,padding:'4px 11px'}} onClick={()=>delRoutine(routine.id)}>Delete</button>}
+            {state.routines.length>1 && <button style={{...S.btnDng,marginLeft:'auto',fontSize:12,padding:'6px 12px'}} onClick={()=>delRoutine(routine.id)}>Delete</button>}
           </div>
           {slots.map(sl => (
             <div key={sl.key} style={{marginBottom:22}}>
@@ -501,16 +501,16 @@ export default function Dashboard() {
                 <button style={{...S.btnGh,marginLeft:'auto'}} onClick={()=>{setTaskModal(sl.key);setTaskForm({name:'',icon:'',desc:'',slot:sl.key,xp:30})}}>+ Add Task</button>
               </div>
               {!(routine.tasks[sl.key]||[]).length
-                ? <div style={{textAlign:'center',padding:14,color:'var(--muted)',fontSize:11,background:'var(--surface2)',borderRadius:8}}>No tasks yet — add one above.</div>
+                ? <div style={{textAlign:'center',padding:14,color:'var(--muted)',fontSize:14,background:'var(--surface2)',borderRadius:8}}>No tasks yet — add one above.</div>
                 : (routine.tasks[sl.key]||[]).map(t => {
                   const done = !!state.taskDoneMap[`${routine.id}_${t.id}`]
                   return (
                     <div key={t.id} style={{background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:8,padding:'11px 14px',display:'flex',alignItems:'center',gap:10,marginBottom:5,opacity:done?0.42:1}}>
                       <span style={{fontSize:16,width:24,textAlign:'center'}}>{t.icon}</span>
-                      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:500}}>{t.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{t.desc}</div></div>
+                      <div style={{flex:1}}><div style={{fontSize:15,fontWeight:500}}>{t.name}</div><div style={{fontSize:15,color:'var(--muted)',marginTop:2}}>{t.desc}</div></div>
                       <span style={S.tag}>+{t.xp}xp</span>
-                      <button style={{...S.btn,fontSize:10,padding:'3px 9px',background:done?'var(--surface)':undefined,color:done?'var(--text)':undefined,border:done?'1px solid var(--border)':undefined}} onClick={()=>toggleRoutineTask(routine.id,sl.key,t.id)}>{done?'↩':'✓'}</button>
-                      <button style={{...S.btnDng,fontSize:10,padding:'3px 7px'}} onClick={()=>delRoutineTask(routine.id,sl.key,t.id)}>✕</button>
+                      <button style={{...S.btn,fontSize:13,padding:'6px 10px',background:done?'var(--surface)':undefined,color:done?'var(--text)':undefined,border:done?'1px solid var(--border)':undefined}} onClick={()=>toggleRoutineTask(routine.id,sl.key,t.id)}>{done?'↩':'✓'}</button>
+                      <button style={{...S.btnDng,fontSize:13,padding:'6px 8px'}} onClick={()=>delRoutineTask(routine.id,sl.key,t.id)}>✕</button>
                     </div>
                   )
                 })}
@@ -536,7 +536,7 @@ export default function Dashboard() {
                   <div style={{background:t.bg}}></div><div style={{background:t.surface}}></div>
                   <div style={{background:t.accent}}></div><div style={{background:t.surface2}}></div>
                 </div>
-                <div style={{background:t.bg,padding:'5px 7px',fontSize:9,fontWeight:600,textAlign:'center',color:t.accent,textTransform:'capitalize'}}>{id}</div>
+                <div style={{background:t.bg,padding:'5px 7px',fontSize:15,fontWeight:600,textAlign:'center',color:t.accent,textTransform:'capitalize'}}>{id}</div>
               </div>
             ))}
           </div>
@@ -546,7 +546,7 @@ export default function Dashboard() {
           <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>🔔 PREFERENCES</div>
           {[{key:'toasts',label:'XP Toast Notifications',sub:'Pop-ups when you earn XP'}].map(p => (
             <div key={p.key} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'13px 16px',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:10,marginBottom:6}}>
-              <div><div style={{fontSize:13,fontWeight:500}}>{p.label}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{p.sub}</div></div>
+              <div><div style={{fontSize:15,fontWeight:500}}>{p.label}</div><div style={{fontSize:15,color:'var(--muted)',marginTop:2}}>{p.sub}</div></div>
               <div onClick={()=>update(s=>({...s,settings:{...s.settings,[p.key]:!s.settings[p.key]}}))}
                 style={{width:40,height:21,borderRadius:11,cursor:'pointer',position:'relative',background:state.settings[p.key]?'var(--accent)':'var(--border)',transition:'background 0.2s'}}>
                 <div style={{position:'absolute',width:15,height:15,background:'white',borderRadius:'50%',top:3,left:state.settings[p.key]?22:3,transition:'left 0.2s'}}></div>
@@ -558,7 +558,7 @@ export default function Dashboard() {
         <div style={{marginBottom:28}}>
           <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>⚠️ DANGER ZONE</div>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'13px 16px',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:10}}>
-            <div><div style={{fontSize:13,fontWeight:500}}>Reset All Progress</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>Clears XP, streaks, completions</div></div>
+            <div><div style={{fontSize:15,fontWeight:500}}>Reset All Progress</div><div style={{fontSize:15,color:'var(--muted)',marginTop:2}}>Clears XP, streaks, completions</div></div>
             <button style={S.btnDng} onClick={resetProgress}>Reset</button>
           </div>
         </div>
@@ -567,7 +567,7 @@ export default function Dashboard() {
         <div style={{...S.card,textAlign:'center'}}>
           <div style={{fontSize:28,marginBottom:8}}>🇮🇳</div>
           <div style={{fontWeight:600,fontSize:15,marginBottom:6}}>Made in India by a teen dev</div>
-          <div style={{color:'var(--muted)',fontSize:13,marginBottom:18,lineHeight:1.6}}>Built entirely with AI — without writing a single line of code by hand.</div>
+          <div style={{color:'var(--muted)',fontSize:15,marginBottom:18,lineHeight:1.6}}>Built entirely with AI — without writing a single line of code by hand.</div>
 
         </div>
       </div>
@@ -593,10 +593,10 @@ export default function Dashboard() {
             {section:'Customize',items:[{id:'routines',icon:'📋',label:'My Routines'},{id:'settings',icon:'⚙️',label:'Settings'}]},
           ].map(group => (
             <div key={group.section}>
-              <div style={{padding:'10px 20px 3px',fontSize:9,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5}}>{group.section}</div>
+              <div style={{padding:'10px 20px 3px',fontSize:12,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5}}>{group.section}</div>
               {group.items.map(n => (
                 <div key={n.id} onClick={()=>setPanel(n.id)}
-                  style={{display:'flex',alignItems:'center',gap:10,padding:'10px 20px',cursor:'pointer',fontSize:13,fontWeight:500,color:panel===n.id?'var(--accent)':'var(--muted)',borderLeft:`2px solid ${panel===n.id?'var(--accent)':'transparent'}`,background:panel===n.id?'rgba(var(--accent-rgb),0.07)':'transparent'}}>
+                  style={{display:'flex',alignItems:'center',gap:10,padding:'10px 20px',cursor:'pointer',fontSize:15,fontWeight:500,color:panel===n.id?'var(--accent)':'var(--muted)',borderLeft:`2px solid ${panel===n.id?'var(--accent)':'transparent'}`,background:panel===n.id?'rgba(var(--accent-rgb),0.07)':'transparent'}}>
                   <span style={{fontSize:14,width:18,textAlign:'center'}}>{n.icon}</span>{n.label}
                 </div>
               ))}
@@ -605,24 +605,24 @@ export default function Dashboard() {
         </div>
         {/* Level badge */}
         <div style={{margin:'10px 12px 8px',background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:12,padding:'16px 18px',transition:'all 0.3s'}}>
-          <div style={{fontSize:10,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5,marginBottom:4}}>Level</div>
+          <div style={{fontSize:15,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5,marginBottom:4}}>Level</div>
           <div style={{display:'flex',alignItems:'baseline',gap:8,marginBottom:2}}>
             <div style={{fontFamily:'Bebas Neue',fontSize:48,color:'var(--accent)',lineHeight:1,textShadow:'0 0 20px rgba(var(--accent-rgb),0.4)'}}>{lvl}</div>
-            <div style={{fontSize:13,color:'var(--accent)',fontWeight:600}}>{LEVEL_TAGS[Math.min(lvl,10)]}</div>
+            <div style={{fontSize:15,color:'var(--accent)',fontWeight:600}}>{LEVEL_TAGS[Math.min(lvl,10)]}</div>
           </div>
           <div style={{background:'var(--border)',borderRadius:4,height:5,marginTop:10}}>
             <div style={{background:'var(--accent)',borderRadius:4,height:5,width:`${xpPct(state)}%`,transition:'width 0.8s cubic-bezier(0.34,1.56,0.64,1)',boxShadow:'0 0 8px rgba(var(--accent-rgb),0.6)'}}></div>
           </div>
-          <div style={{fontSize:11,color:'var(--muted)',marginTop:6,fontFamily:'JetBrains Mono'}}>{state.xp % 1000} / 1000 XP</div>
+          <div style={{fontSize:15,color:'var(--muted)',marginTop:6,fontFamily:'JetBrains Mono'}}>{state.xp % 1000} / 1000 XP</div>
         </div>
         {/* User */}
         <div style={{padding:'12px 16px',borderTop:'1px solid var(--border)',display:'flex',alignItems:'center',gap:10}}>
-          <div style={{width:28,height:28,borderRadius:'50%',background:'rgba(var(--accent-rgb),0.15)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,color:'var(--accent)',fontWeight:600}}>
+          <div style={{width:28,height:28,borderRadius:'50%',background:'rgba(var(--accent-rgb),0.15)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,color:'var(--accent)',fontWeight:600}}>
             {user?.displayName?.[0]?.toUpperCase() || '?'}
           </div>
           <div style={{flex:1,overflow:'hidden'}}>
-            <div style={{fontSize:12,fontWeight:600,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{user?.displayName || 'User'}</div>
-            <div style={{fontSize:9,color:'var(--muted)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{user?.email}</div>
+            <div style={{fontSize:15,fontWeight:600,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{user?.displayName || 'User'}</div>
+            <div style={{fontSize:12,color:'var(--muted)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{user?.email}</div>
           </div>
           <button onClick={async()=>{await logOut();router.push('/')}} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16}} title="Logout">→</button>
         </div>
@@ -639,7 +639,7 @@ export default function Dashboard() {
       </div>
 
       {/* SAVING */}
-      {saving && <div style={{position:'fixed',top:12,right:12,background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:6,padding:'5px 12px',fontSize:10,color:'var(--muted)',zIndex:999}}>Saving...</div>}
+      {saving && <div style={{position:'fixed',top:12,right:12,background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:6,padding:'5px 12px',fontSize:15,color:'var(--muted)',zIndex:999}}>Saving...</div>}
 
       {/* HABIT MODAL */}
       {habitModal !== null && (
