@@ -310,7 +310,7 @@ export default function Dashboard() {
             <div key={c.id} onClick={()=>toggleChallenge(c.id)}
               style={{...S.card, display:'flex', alignItems:'center', gap:12, cursor:'pointer', opacity:c.done?0.45:1, padding:'13px 16px', borderColor:c.done?'#6ee7b7':'var(--border)'}}>
               <span style={{fontSize:18,width:28,textAlign:'center'}}>{c.icon}</span>
-              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
               <span style={S.tag}>+{c.xp} XP</span>
               <div style={{width:20,height:20,borderRadius:'50%',border:`2px solid ${c.done?'#6ee7b7':'var(--border)'}`,background:c.done?'#6ee7b7':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:'#000'}}>{c.done?'✓':''}</div>
             </div>
@@ -363,7 +363,7 @@ export default function Dashboard() {
             <div key={c.id} onClick={()=>toggleChallenge(c.id)}
               style={{...S.card,display:'flex',alignItems:'center',gap:12,cursor:'pointer',opacity:c.done?0.4:1,padding:'13px 16px',borderColor:c.done?'#6ee7b7':'var(--border)'}}>
               <span style={{fontSize:18,width:28,textAlign:'center'}}>{c.icon}</span>
-              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
               <span style={{fontFamily:'JetBrains Mono',fontSize:9,color:'var(--muted)',background:'var(--surface2)',padding:'3px 6px',borderRadius:4}}>{c.time}</span>
               <span style={S.tag}>+{c.xp} XP</span>
               <div style={{width:20,height:20,borderRadius:'50%',border:`2px solid ${c.done?'#6ee7b7':'var(--border)'}`,background:c.done?'#6ee7b7':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:'#000'}}>{c.done?'✓':''}</div>
@@ -495,7 +495,7 @@ export default function Dashboard() {
                   return (
                     <div key={t.id} style={{background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:8,padding:'11px 14px',display:'flex',alignItems:'center',gap:10,marginBottom:5,opacity:done?0.42:1}}>
                       <span style={{fontSize:16,width:24,textAlign:'center'}}>{t.icon}</span>
-                      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:500}}>{t.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{t.desc}</div></div>
+                      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:500}}>{t.name}</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>{t.desc}</div></div>
                       <span style={S.tag}>+{t.xp}xp</span>
                       <button style={{...S.btn,fontSize:10,padding:'3px 9px',background:done?'var(--surface)':undefined,color:done?'var(--text)':undefined,border:done?'1px solid var(--border)':undefined}} onClick={()=>toggleRoutineTask(routine.id,sl.key,t.id)}>{done?'↩':'✓'}</button>
                       <button style={{...S.btnDng,fontSize:10,padding:'3px 7px'}} onClick={()=>delRoutineTask(routine.id,sl.key,t.id)}>✕</button>
@@ -534,7 +534,7 @@ export default function Dashboard() {
           <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>🔔 PREFERENCES</div>
           {[{key:'toasts',label:'XP Toast Notifications',sub:'Pop-ups when you earn XP'},{key:'compact',label:'Compact Mode',sub:'Reduced padding'}].map(p => (
             <div key={p.key} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'13px 16px',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:10,marginBottom:6}}>
-              <div><div style={{fontSize:13,fontWeight:500}}>{p.label}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{p.sub}</div></div>
+              <div><div style={{fontSize:13,fontWeight:500}}>{p.label}</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>{p.sub}</div></div>
               <div onClick={()=>update(s=>({...s,settings:{...s.settings,[p.key]:!s.settings[p.key]}}))}
                 style={{width:40,height:21,borderRadius:11,cursor:'pointer',position:'relative',background:state.settings[p.key]?'var(--accent)':'var(--border)',transition:'background 0.2s'}}>
                 <div style={{position:'absolute',width:15,height:15,background:'white',borderRadius:'50%',top:3,left:state.settings[p.key]?22:3,transition:'left 0.2s'}}></div>
@@ -546,18 +546,17 @@ export default function Dashboard() {
         <div style={{marginBottom:28}}>
           <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>⚠️ DANGER ZONE</div>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'13px 16px',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:10}}>
-            <div><div style={{fontSize:13,fontWeight:500}}>Reset All Progress</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>Clears XP, streaks, completions</div></div>
+            <div><div style={{fontSize:13,fontWeight:500}}>Reset All Progress</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>Clears XP, streaks, completions</div></div>
             <button style={S.btnDng} onClick={resetProgress}>Reset</button>
           </div>
         </div>
         {/* Support */}
-        <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>☕ SUPPORT</div>
+        <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>✨ Support</div>
         <div style={{...S.card,textAlign:'center'}}>
           <div style={{fontSize:28,marginBottom:8}}>🇮🇳</div>
           <div style={{fontWeight:600,fontSize:15,marginBottom:6}}>Made in India by a teen dev</div>
           <div style={{color:'var(--muted)',fontSize:13,marginBottom:18,lineHeight:1.6}}>Built entirely with AI — without writing a single line of code by hand.</div>
-          <a href="https://buymeacoffee.com" target="_blank" rel="noopener noreferrer"
-            style={{background:'#FFDD00',color:'#000',padding:'11px 26px',borderRadius:9,fontSize:13,fontWeight:700,textDecoration:'none',display:'inline-block'}}>☕ Buy me a coffee</a>
+
         </div>
       </div>
     )
