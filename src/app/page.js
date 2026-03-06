@@ -101,10 +101,7 @@ export default function Home() {
             Built by an Indian teenager using AI — without writing a single line of code by hand.
             Proof that great software can come from anywhere, by anyone.
           </p>
-          <a href="https://buymeacoffee.com" target="_blank" rel="noopener noreferrer"
-            style={{ background: '#FFDD00', color: '#000', padding: '12px 28px', borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: 'none', display: 'inline-block' }}>
-            ☕ Buy me a coffee
-          </a>
+
         </div>
       </section>
 
@@ -122,8 +119,7 @@ export default function Home() {
       {/* FOOTER */}
       <footer style={{ borderTop: '1px solid var(--border)', padding: '28px 24px', textAlign: 'center' }}>
         <div style={{ color: 'var(--muted)', fontSize: 12 }}>
-          © 2025 Trackify · Made with ❤️ in India ·{' '}
-          <a href="https://buymeacoffee.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Support the project ☕</a>
+          © 2025 Trackify · Made with ❤️ in India
         </div>
       </footer>
     </div>
