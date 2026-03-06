@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg: #121318;
+  --surface: #1c1e26;
+  --surface2: #252830;
+  --border: #2e3140;
+  --accent: #a78bfa;
+  --accent-rgb: 167,139,250;
+  --text: #e8eaf0;
+  --muted: #6b7280;
+  --green: #6ee7b7;
+  --orange: #fbbf24;
+  --red: #f87171;
+}
+
+* { box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
