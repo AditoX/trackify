@@ -8,7 +8,7 @@ const DEFAULT_STATE = () => ({
   xp: 0,
   streak: 0,
   lastSaved: '',
-  settings: { toasts: true, compact: false, theme: 'default' },
+  settings: { toasts: true, theme: 'slate' },
   challenges: [
     { id:1, name:'10-Min Cold Shower',  icon:'🚿', time:'Morning',   slot:'morning',   done:false, xp:50, why:'Boosts dopamine & mental toughness' },
     { id:2, name:'30-Min Walk Outside', icon:'🚶', time:'Afternoon', slot:'afternoon', done:false, xp:40, why:'Clears mind, improves mood' },
@@ -53,6 +53,18 @@ const THEMES = {
 }
 
 const LEVEL_TAGS = ['','Rookie','Challenger','Warrior','Elite','Champion','Legend','Mythic','Titan','God','Unstoppable']
+
+// ── MODAL (top-level to prevent focus loss on re-render) ──
+function Modal({ onClose, title, children }) {
+  return (
+    <div onClick={e=>{if(e.target===e.currentTarget)onClose()}} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.72)',zIndex:200,display:'flex',alignItems:'center',justifyContent:'center',backdropFilter:'blur(4px)'}}>
+      <div style={{background:'var(--surface)',border:'1px solid var(--border)',borderRadius:14,padding:26,width:460,maxWidth:'94vw',boxShadow:'0 24px 60px rgba(0,0,0,0.6)'}}>
+        <div style={{fontFamily:'Bebas Neue',fontSize:22,letterSpacing:1,marginBottom:18}}>{title}</div>
+        {children}
+      </div>
+    </div>
+  )
+}
 
 export default function Dashboard() {
   const router = useRouter()
@@ -227,7 +239,7 @@ export default function Dashboard() {
     if (!rName.trim()) return
     const nr = { id: Date.now(), name: rName, desc: rDesc || 'Custom routine', tasks: { morning:[], afternoon:[], evening:[] } }
     update(s => ({ ...s, routines: [...s.routines, nr] }))
-    setRoutineIdx(s => s)
+    setRoutineIdx(state.routines.length)
     setRoutineModal(false); setRName(''); setRDesc('')
     toast_(`"${rName}" created! 🎉`)
   }
@@ -310,7 +322,7 @@ export default function Dashboard() {
             <div key={c.id} onClick={()=>toggleChallenge(c.id)}
               style={{...S.card, display:'flex', alignItems:'center', gap:12, cursor:'pointer', opacity:c.done?0.45:1, padding:'13px 16px', borderColor:c.done?'#6ee7b7':'var(--border)'}}>
               <span style={{fontSize:18,width:28,textAlign:'center'}}>{c.icon}</span>
-              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
               <span style={S.tag}>+{c.xp} XP</span>
               <div style={{width:20,height:20,borderRadius:'50%',border:`2px solid ${c.done?'#6ee7b7':'var(--border)'}`,background:c.done?'#6ee7b7':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:'#000'}}>{c.done?'✓':''}</div>
             </div>
@@ -363,7 +375,7 @@ export default function Dashboard() {
             <div key={c.id} onClick={()=>toggleChallenge(c.id)}
               style={{...S.card,display:'flex',alignItems:'center',gap:12,cursor:'pointer',opacity:c.done?0.4:1,padding:'13px 16px',borderColor:c.done?'#6ee7b7':'var(--border)'}}>
               <span style={{fontSize:18,width:28,textAlign:'center'}}>{c.icon}</span>
-              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{c.why}</div></div>
               <span style={{fontFamily:'JetBrains Mono',fontSize:9,color:'var(--muted)',background:'var(--surface2)',padding:'3px 6px',borderRadius:4}}>{c.time}</span>
               <span style={S.tag}>+{c.xp} XP</span>
               <div style={{width:20,height:20,borderRadius:'50%',border:`2px solid ${c.done?'#6ee7b7':'var(--border)'}`,background:c.done?'#6ee7b7':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:'#000'}}>{c.done?'✓':''}</div>
@@ -495,7 +507,7 @@ export default function Dashboard() {
                   return (
                     <div key={t.id} style={{background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:8,padding:'11px 14px',display:'flex',alignItems:'center',gap:10,marginBottom:5,opacity:done?0.42:1}}>
                       <span style={{fontSize:16,width:24,textAlign:'center'}}>{t.icon}</span>
-                      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:500}}>{t.name}</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>{t.desc}</div></div>
+                      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:500}}>{t.name}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{t.desc}</div></div>
                       <span style={S.tag}>+{t.xp}xp</span>
                       <button style={{...S.btn,fontSize:10,padding:'3px 9px',background:done?'var(--surface)':undefined,color:done?'var(--text)':undefined,border:done?'1px solid var(--border)':undefined}} onClick={()=>toggleRoutineTask(routine.id,sl.key,t.id)}>{done?'↩':'✓'}</button>
                       <button style={{...S.btnDng,fontSize:10,padding:'3px 7px'}} onClick={()=>delRoutineTask(routine.id,sl.key,t.id)}>✕</button>
@@ -532,9 +544,9 @@ export default function Dashboard() {
         {/* Toggles */}
         <div style={{marginBottom:28}}>
           <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>🔔 PREFERENCES</div>
-          {[{key:'toasts',label:'XP Toast Notifications',sub:'Pop-ups when you earn XP'},{key:'compact',label:'Compact Mode',sub:'Reduced padding'}].map(p => (
+          {[{key:'toasts',label:'XP Toast Notifications',sub:'Pop-ups when you earn XP'}].map(p => (
             <div key={p.key} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'13px 16px',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:10,marginBottom:6}}>
-              <div><div style={{fontSize:13,fontWeight:500}}>{p.label}</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>{p.sub}</div></div>
+              <div><div style={{fontSize:13,fontWeight:500}}>{p.label}</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{p.sub}</div></div>
               <div onClick={()=>update(s=>({...s,settings:{...s.settings,[p.key]:!s.settings[p.key]}}))}
                 style={{width:40,height:21,borderRadius:11,cursor:'pointer',position:'relative',background:state.settings[p.key]?'var(--accent)':'var(--border)',transition:'background 0.2s'}}>
                 <div style={{position:'absolute',width:15,height:15,background:'white',borderRadius:'50%',top:3,left:state.settings[p.key]?22:3,transition:'left 0.2s'}}></div>
@@ -546,12 +558,12 @@ export default function Dashboard() {
         <div style={{marginBottom:28}}>
           <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>⚠️ DANGER ZONE</div>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'13px 16px',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:10}}>
-            <div><div style={{fontSize:13,fontWeight:500}}>Reset All Progress</div><div style={{fontSize:13,color:'var(--muted)',marginTop:2}}>Clears XP, streaks, completions</div></div>
+            <div><div style={{fontSize:13,fontWeight:500}}>Reset All Progress</div><div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>Clears XP, streaks, completions</div></div>
             <button style={S.btnDng} onClick={resetProgress}>Reset</button>
           </div>
         </div>
         {/* Support */}
-        <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>✨ Support</div>
+        <div style={{fontFamily:'Bebas Neue',fontSize:16,letterSpacing:1,color:'var(--muted)',marginBottom:12}}>☕ SUPPORT</div>
         <div style={{...S.card,textAlign:'center'}}>
           <div style={{fontSize:28,marginBottom:8}}>🇮🇳</div>
           <div style={{fontWeight:600,fontSize:15,marginBottom:6}}>Made in India by a teen dev</div>
@@ -564,17 +576,7 @@ export default function Dashboard() {
 
   const PANELS = { dashboard:<Dashboard/>, challenges:<Challenges/>, habits:<Habits/>, workout:<Workout/>, routines:<Routines/>, settings:<Settings/> }
 
-  // ── MODAL helper ─────────────────────────────────────────
-  function Modal({ onClose, title, children }) {
-    return (
-      <div onClick={e=>{if(e.target===e.currentTarget)onClose()}} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.72)',zIndex:200,display:'flex',alignItems:'center',justifyContent:'center',backdropFilter:'blur(4px)'}}>
-        <div style={{background:'var(--surface)',border:'1px solid var(--border)',borderRadius:14,padding:26,width:460,maxWidth:'94vw',boxShadow:'0 24px 60px rgba(0,0,0,0.6)'}}>
-          <div style={{fontFamily:'Bebas Neue',fontSize:22,letterSpacing:1,marginBottom:18}}>{title}</div>
-          {children}
-        </div>
-      </div>
-    )
-  }
+  // Modal is defined outside to prevent focus loss on re-render
 
   return (
     <div style={{display:'flex',minHeight:'100vh',background:'var(--bg)'}}>
@@ -602,16 +604,16 @@ export default function Dashboard() {
           ))}
         </div>
         {/* Level badge */}
-        <div style={{margin:'10px 12px 8px',background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:10,padding:'12px 14px'}}>
-          <div style={{fontSize:9,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1}}>Level</div>
-          <div style={{display:'flex',alignItems:'baseline',gap:6}}>
-            <div style={{fontFamily:'Bebas Neue',fontSize:32,color:'var(--accent)',lineHeight:1}}>{lvl}</div>
-            <div style={{fontSize:10,color:'var(--muted)'}}>{LEVEL_TAGS[Math.min(lvl,10)]}</div>
+        <div style={{margin:'10px 12px 8px',background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:12,padding:'16px 18px',transition:'all 0.3s'}}>
+          <div style={{fontSize:10,color:'var(--muted)',textTransform:'uppercase',letterSpacing:1.5,marginBottom:4}}>Level</div>
+          <div style={{display:'flex',alignItems:'baseline',gap:8,marginBottom:2}}>
+            <div style={{fontFamily:'Bebas Neue',fontSize:48,color:'var(--accent)',lineHeight:1,textShadow:'0 0 20px rgba(var(--accent-rgb),0.4)'}}>{lvl}</div>
+            <div style={{fontSize:13,color:'var(--accent)',fontWeight:600}}>{LEVEL_TAGS[Math.min(lvl,10)]}</div>
           </div>
-          <div style={{background:'var(--border)',borderRadius:4,height:4,marginTop:7}}>
-            <div style={{background:'var(--accent)',borderRadius:4,height:4,width:`${xpPct(state)}%`,transition:'width 0.5s',boxShadow:'0 0 6px rgba(var(--accent-rgb),0.5)'}}></div>
+          <div style={{background:'var(--border)',borderRadius:4,height:5,marginTop:10}}>
+            <div style={{background:'var(--accent)',borderRadius:4,height:5,width:`${xpPct(state)}%`,transition:'width 0.8s cubic-bezier(0.34,1.56,0.64,1)',boxShadow:'0 0 8px rgba(var(--accent-rgb),0.6)'}}></div>
           </div>
-          <div style={{fontSize:9,color:'var(--muted)',marginTop:4,fontFamily:'JetBrains Mono'}}>{state.xp % 1000} / 1000 XP</div>
+          <div style={{fontSize:11,color:'var(--muted)',marginTop:6,fontFamily:'JetBrains Mono'}}>{state.xp % 1000} / 1000 XP</div>
         </div>
         {/* User */}
         <div style={{padding:'12px 16px',borderTop:'1px solid var(--border)',display:'flex',alignItems:'center',gap:10}}>
@@ -680,7 +682,7 @@ export default function Dashboard() {
       {/* NEW ROUTINE MODAL */}
       {routineModal && (
         <Modal onClose={()=>setRoutineModal(false)} title={<>CREATE <span style={{color:'var(--accent)'}}>ROUTINE</span></>}>
-          <div style={{marginBottom:10}}><label style={S.lbl}>Routine Name *</label><input style={S.inp} value={rName} onChange={e=>setRName(e.target.value)} autoFocus placeholder="Gym Day" /></div>
+          <div style={{marginBottom:10}}><label style={S.lbl}>Routine Name *</label><input style={S.inp} value={rName} onChange={e=>setRName(e.target.value)} placeholder="Gym Day" /></div>
           <div><label style={S.lbl}>Description</label><input style={S.inp} value={rDesc} onChange={e=>setRDesc(e.target.value)} placeholder="What's this for?" /></div>
           <div style={{display:'flex',gap:8,justifyContent:'flex-end',marginTop:18}}>
             <button style={S.btnSec} onClick={()=>setRoutineModal(false)}>Cancel</button>
