@@ -86,11 +86,15 @@ export default function Dashboard() {
   const [rDesc,      setRDesc]      = useState('')
 
   const saveTimer = useRef(null)
+  const [authReady, setAuthReady] = useState(false)
 
   // ── AUTH ────────────────────────────────────────────────
   useEffect(() => {
     const unsub = onAuthChange(async (u) => {
+      setAuthReady(true)
       if (!u) { router.push('/login'); return }
+      // Block unverified users
+      if (!u.emailVerified) { router.push('/login'); return }
       setUser(u)
       const saved = await loadUserData(u.uid)
       const today = new Date().toDateString()
@@ -101,7 +105,7 @@ export default function Dashboard() {
           saved.habits = saved.habits.map(h => ({ ...h, done: false, streak: h.done ? h.streak + 1 : h.streak }))
           saved.workouts = []
           saved.taskDoneMap = {}
-          const anyHabitDone = saved.habits.some(h => h.done) // won't be true after reset, check original
+          const anyHabitDone = saved.habits.some(h => h.done)
           saved.streak = anyHabitDone ? (saved.streak || 0) + 1 : saved.streak || 0
         }
         setState(saved)
@@ -272,11 +276,13 @@ export default function Dashboard() {
   }
 
   // ── LOADING ─────────────────────────────────────────────
-  if (!state) return (
+  if (!authReady || !state) return (
     <div style={{ minHeight:'100vh', background:'var(--bg)', display:'flex', alignItems:'center', justifyContent:'center' }}>
       <div style={{ textAlign:'center' }}>
         <div style={{ fontFamily:'Bebas Neue', fontSize:28, color:'var(--accent)', letterSpacing:2, marginBottom:10 }}>TRACKIFY</div>
-        <div style={{ color:'var(--muted)', fontSize:13 }}>Loading your data...</div>
+        <div style={{ color:'var(--muted)', fontSize:13 }}>
+          {!authReady ? 'Restoring session...' : 'Loading your data...'}
+        </div>
       </div>
     </div>
   )
