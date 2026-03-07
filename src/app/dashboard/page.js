@@ -426,9 +426,87 @@ export default function Dashboard() {
 
   function Workout() {
     const totalSets = state.workouts.reduce((a,w)=>a+parseInt(w.sets||0),0)
+    const [activeTemplate, setActiveTemplate] = useState(null)
+
+    const TEMPLATES = [
+      { id:'push', label:'💪 Push Day', color:'#a78bfa', exercises:[
+        {name:'Bench Press',sets:'4',reps:'8',weight:'60'},
+        {name:'Incline DB Press',sets:'3',reps:'10',weight:'30'},
+        {name:'Shoulder Press',sets:'3',reps:'10',weight:'40'},
+        {name:'Lateral Raises',sets:'3',reps:'15',weight:'10'},
+        {name:'Tricep Dips',sets:'3',reps:'12',weight:'0'},
+        {name:'Push-ups',sets:'2',reps:'20',weight:'0'},
+      ]},
+      { id:'pull', label:'🏋️ Pull Day', color:'#38bdf8', exercises:[
+        {name:'Deadlift',sets:'4',reps:'5',weight:'100'},
+        {name:'Pull-ups',sets:'4',reps:'8',weight:'0'},
+        {name:'Barbell Row',sets:'3',reps:'10',weight:'60'},
+        {name:'Face Pulls',sets:'3',reps:'15',weight:'20'},
+        {name:'Hammer Curls',sets:'3',reps:'12',weight:'15'},
+        {name:'Shrugs',sets:'3',reps:'15',weight:'60'},
+      ]},
+      { id:'legs', label:'🦵 Leg Day', color:'#6ee7b7', exercises:[
+        {name:'Squat',sets:'4',reps:'8',weight:'80'},
+        {name:'Romanian DL',sets:'3',reps:'10',weight:'70'},
+        {name:'Leg Press',sets:'3',reps:'12',weight:'120'},
+        {name:'Lunges',sets:'3',reps:'12',weight:'20'},
+        {name:'Leg Curl',sets:'3',reps:'15',weight:'40'},
+        {name:'Calf Raises',sets:'4',reps:'20',weight:'30'},
+      ]},
+      { id:'chest', label:'🔥 Chest Day', color:'#fb7185', exercises:[
+        {name:'Flat Bench Press',sets:'4',reps:'8',weight:'70'},
+        {name:'Incline Press',sets:'3',reps:'10',weight:'50'},
+        {name:'Cable Flies',sets:'3',reps:'15',weight:'15'},
+        {name:'Dips',sets:'3',reps:'12',weight:'0'},
+        {name:'Push-ups',sets:'3',reps:'20',weight:'0'},
+      ]},
+      { id:'ppl', label:'⚡ Full Body', color:'#fbbf24', exercises:[
+        {name:'Squat',sets:'3',reps:'8',weight:'70'},
+        {name:'Bench Press',sets:'3',reps:'8',weight:'60'},
+        {name:'Barbell Row',sets:'3',reps:'8',weight:'60'},
+        {name:'OHP',sets:'3',reps:'10',weight:'40'},
+        {name:'Deadlift',sets:'3',reps:'5',weight:'100'},
+        {name:'Pull-ups',sets:'3',reps:'8',weight:'0'},
+      ]},
+      { id:'cardio', label:'🏃 Cardio & Core', color:'#86efac', exercises:[
+        {name:'Running',sets:'1',reps:'30min',weight:'0'},
+        {name:'Plank',sets:'3',reps:'60s',weight:'0'},
+        {name:'Crunches',sets:'3',reps:'20',weight:'0'},
+        {name:'Mountain Climbers',sets:'3',reps:'30',weight:'0'},
+        {name:'Jump Rope',sets:'5',reps:'2min',weight:'0'},
+      ]},
+    ]
+
+    function loadTemplate(tmpl) {
+      setActiveTemplate(tmpl.id)
+      tmpl.exercises.forEach((ex, i) => {
+        setTimeout(() => {
+          update(s => ({ ...s, xp: s.xp + 20, workouts: [...s.workouts, { ...ex, id: Date.now() + i }] }))
+        }, i * 50)
+      })
+      toast_(`${tmpl.label} loaded! +${tmpl.exercises.length * 20} XP 💪`)
+    }
+
     return (
       <div>
         <h1 style={{fontFamily:'Bebas Neue',fontSize:46,lineHeight:1,letterSpacing:2,marginBottom:28}}>WORKOUT <span style={{color:'var(--accent)'}}>LOG</span></h1>
+
+        {/* TEMPLATES */}
+        <div style={{...S.card,marginBottom:18}}>
+          <div style={S.sec}>WORKOUT TEMPLATES</div>
+          <p style={{color:'var(--muted)',fontSize:13,marginBottom:14,marginTop:-6}}>Tap a template to load all exercises instantly.</p>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10}}>
+            {TEMPLATES.map(t => (
+              <div key={t.id} onClick={()=>loadTemplate(t)}
+                style={{background:'var(--surface2)',border:`1px solid ${activeTemplate===t.id?t.color:'var(--border)'}`,borderRadius:10,padding:'14px 16px',cursor:'pointer',transition:'all 0.2s',boxShadow:activeTemplate===t.id?`0 0 12px ${t.color}33`:undefined}}>
+                <div style={{fontWeight:700,fontSize:14,marginBottom:4,color:activeTemplate===t.id?t.color:'var(--text)'}}>{t.label}</div>
+                <div style={{fontSize:12,color:'var(--muted)'}}>{t.exercises.length} exercises</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ADD EXERCISE */}
         <div style={{...S.card,marginBottom:18}}>
           <div style={S.sec}>ADD EXERCISE</div>
           <div style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr auto',gap:8,marginBottom:8}}>
@@ -444,22 +522,36 @@ export default function Dashboard() {
             ))}
           </div>
         </div>
+
+        {/* SESSION */}
         <div style={S.card}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
             <div style={S.sec}>TODAY'S SESSION</div>
-            {state.workouts.length>0 && <span style={{fontFamily:'JetBrains Mono',fontSize:15,color:'var(--muted)'}}>{state.workouts.length} exercises · {totalSets} sets</span>}
+            {state.workouts.length>0 && (
+              <div style={{display:'flex',alignItems:'center',gap:12}}>
+                <span style={{fontFamily:'JetBrains Mono',fontSize:13,color:'var(--muted)'}}>{state.workouts.length} exercises · {totalSets} sets</span>
+                <button onClick={()=>update(s=>({...s,workouts:[]}))} style={{...S.btnDng,fontSize:11,padding:'4px 10px'}}>Clear All</button>
+              </div>
+            )}
           </div>
           {!state.workouts.length
-            ? <div style={{textAlign:'center',padding:30,color:'var(--muted)',fontSize:14}}>No exercises yet. Add your first set above.</div>
-            : state.workouts.map(w => (
-              <div key={w.id} style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr auto',gap:8,padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
-                <span style={{fontWeight:500,fontSize:13}}>{w.name}</span>
-                <span style={{color:'var(--muted)',fontFamily:'JetBrains Mono',fontSize:11}}>{w.sets}</span>
-                <span style={{color:'var(--muted)',fontFamily:'JetBrains Mono',fontSize:11}}>{w.reps}</span>
-                <span style={{color:'var(--muted)',fontFamily:'JetBrains Mono',fontSize:11}}>{+w.weight>0?w.weight+'kg':'BW'}</span>
-                <button onClick={()=>delWorkout(w.id)} style={{background:'none',border:'none',color:'#f87171',cursor:'pointer',fontSize:14}}>✕</button>
+            ? <div style={{textAlign:'center',padding:30,color:'var(--muted)',fontSize:14}}>No exercises yet. Pick a template or add manually above.</div>
+            : <>
+              <div style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr auto',gap:8,padding:'6px 0',borderBottom:'1px solid var(--border)',marginBottom:4}}>
+                {['Exercise','Sets','Reps','Weight',''].map(h=>(
+                  <span key={h} style={{fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:1}}>{h}</span>
+                ))}
               </div>
-            ))
+              {state.workouts.map(w => (
+                <div key={w.id} style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr auto',gap:8,padding:'11px 0',borderBottom:'1px solid var(--border)'}}>
+                  <span style={{fontWeight:500,fontSize:14}}>{w.name}</span>
+                  <span style={{color:'var(--muted)',fontFamily:'JetBrains Mono',fontSize:13}}>{w.sets}</span>
+                  <span style={{color:'var(--muted)',fontFamily:'JetBrains Mono',fontSize:13}}>{w.reps}</span>
+                  <span style={{color:'var(--muted)',fontFamily:'JetBrains Mono',fontSize:13}}>{+w.weight>0?w.weight+'kg':'BW'}</span>
+                  <button onClick={()=>delWorkout(w.id)} style={{background:'none',border:'none',color:'#f87171',cursor:'pointer',fontSize:16}}>✕</button>
+                </div>
+              ))}
+            </>
           }
         </div>
       </div>
