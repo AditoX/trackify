@@ -90,19 +90,9 @@ export default function Dashboard() {
 
   // ── AUTH ────────────────────────────────────────────────
   useEffect(() => {
-    let settled = false
-    // Wait for Firebase to settle before redirecting to login
-    // This handles the Google redirect flow where null fires before user
-    const timer = setTimeout(() => { settled = true }, 3000)
-
     const unsub = onAuthChange(async (u) => {
-      if (!u) {
-        if (settled) router.push('/login')
-        return
-      }
-      clearTimeout(timer)
-      settled = true
       setAuthReady(true)
+      if (!u) { router.push('/login'); return }
       setUser(u)
       const saved = await loadUserData(u.uid)
       const today = new Date().toDateString()
@@ -121,7 +111,7 @@ export default function Dashboard() {
         setState(DEFAULT_STATE())
       }
     })
-    return () => { clearTimeout(timer); unsub() }
+    return unsub
   }, [])
 
   // ── THEME ───────────────────────────────────────────────
