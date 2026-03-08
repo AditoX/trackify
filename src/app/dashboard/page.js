@@ -93,8 +93,6 @@ export default function Dashboard() {
     const unsub = onAuthChange(async (u) => {
       setAuthReady(true)
       if (!u) { router.push('/login'); return }
-      // Block unverified users
-      if (!u.emailVerified) { router.push('/login'); return }
       setUser(u)
       const saved = await loadUserData(u.uid)
       const today = new Date().toDateString()

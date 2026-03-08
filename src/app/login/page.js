@@ -2,123 +2,93 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { logIn, resendVerification } from '../../lib/firebase'
+import { signInWithGoogle } from '../../lib/firebase'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [notVerified, setNotVerified] = useState(false)
-  const [resent, setResent] = useState(false)
+  const [error, setError] = useState('')
   const [blockerDetected, setBlockerDetected] = useState(false)
 
   useEffect(() => {
-    // Detect if Firebase is being blocked
     fetch('https://firestore.googleapis.com/favicon.ico', { mode: 'no-cors' })
       .catch(() => setBlockerDetected(true))
   }, [])
 
-  const handle = async (e) => {
-    e.preventDefault()
-    setError(''); setNotVerified(false); setLoading(true)
+  const handleGoogle = async () => {
+    setError(''); setLoading(true)
     try {
-      await logIn(email, password)
+      await signInWithGoogle()
       router.push('/dashboard')
     } catch (err) {
-      if (err.code === 'auth/email-not-verified') {
-        setNotVerified(true)
+      if (err.code === 'auth/popup-blocked') {
+        setError('Popup was blocked. Please allow popups for this site.')
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        setError('Sign in was cancelled.')
       } else {
-        const msg = {
-          'auth/user-not-found': 'No account found with this email.',
-          'auth/wrong-password': 'Wrong password. Try again.',
-          'auth/invalid-credential': 'Invalid email or password.',
-          'auth/too-many-requests': 'Too many attempts. Try again later.',
-        }
-        setError(msg[err.code] || 'Login failed. Please try again.')
+        setError('Sign in failed. Please try again.')
       }
     } finally { setLoading(false) }
   }
-
-  const handleResend = async () => {
-    try {
-      await resendVerification(email, password)
-      setResent(true)
-    } catch (err) {
-      setError('Could not resend email. Check your credentials.')
-    }
-  }
-
-  const inp = { width:'100%', background:'var(--surface2)', border:'1px solid var(--border)', borderRadius:8, color:'var(--text)', padding:'10px 14px', fontSize:14, outline:'none', fontFamily:'DM Sans, sans-serif' }
-  const lbl = { fontSize:11, color:'var(--muted)', textTransform:'uppercase', letterSpacing:1, display:'block', marginBottom:6 }
 
   return (
     <div style={{ minHeight:'100vh', background:'var(--bg)', display:'flex', alignItems:'center', justifyContent:'center', padding:24 }}>
       <div style={{ width:'100%', maxWidth:400 }}>
 
-        {/* Blocker warning */}
         {blockerDetected && (
           <div style={{ background:'rgba(251,191,36,0.1)', border:'1px solid #fbbf24', borderRadius:10, padding:'14px 16px', marginBottom:20, fontSize:13 }}>
-            <div style={{ fontWeight:700, color:'#fbbf24', marginBottom:6 }}>🛡️ Ad blocker detected</div>
-            <div style={{ color:'var(--muted)', lineHeight:1.6 }}>
-              Trackify uses Firebase which is blocked by Brave Shields and ad blockers.
-              Please <strong style={{color:'var(--text)'}}>disable your ad blocker</strong> or <strong style={{color:'var(--text)'}}>turn off Brave Shields</strong> for this site to login.
-            </div>
-            <div style={{ marginTop:10, fontSize:12, color:'var(--muted)' }}>
-              Brave: Click the lion icon 🦁 in the address bar → Turn off Shields for this site
-            </div>
+            <div style={{ fontWeight:700, color:'#fbbf24', marginBottom:4 }}>🛡️ Ad blocker / Brave Shields detected</div>
+            <div style={{ color:'var(--muted)', lineHeight:1.6 }}>Please disable for this site. Brave: click the 🦁 lion → turn off Shields.</div>
           </div>
         )}
 
-        <div style={{ textAlign:'center', marginBottom:36 }}>
+        <div style={{ textAlign:'center', marginBottom:40 }}>
           <Link href="/" style={{ fontFamily:'Bebas Neue', fontSize:28, letterSpacing:2, color:'var(--accent)', textDecoration:'none' }}>TRACKIFY</Link>
-          <div style={{ fontSize:22, fontWeight:600, marginTop:14 }}>Welcome back 👋</div>
-          <div style={{ color:'var(--muted)', fontSize:14, marginTop:4 }}>Sign in to continue your streak 🔥</div>
+          <div style={{ fontSize:22, fontWeight:600, marginTop:16, color:'var(--text)' }}>Welcome 👋</div>
+          <div style={{ color:'var(--muted)', fontSize:14, marginTop:6 }}>Sign in to start your streak 🔥</div>
         </div>
 
-        <div style={{ background:'var(--surface)', border:'1px solid var(--border)', borderRadius:14, padding:32 }}>
-          <form onSubmit={handle}>
-            <div style={{ marginBottom:16 }}>
-              <label style={lbl}>Email</label>
-              <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required placeholder="you@email.com" style={inp} />
-            </div>
-            <div style={{ marginBottom:24 }}>
-              <label style={lbl}>Password</label>
-              <input type="password" value={password} onChange={e=>setPassword(e.target.value)} required placeholder="••••••••" style={inp} />
-            </div>
+        <div style={{ background:'var(--surface)', border:'1px solid var(--border)', borderRadius:16, padding:36, textAlign:'center' }}>
+          <div style={{ fontSize:48, marginBottom:16 }}>⚡</div>
+          <div style={{ fontWeight:600, fontSize:16, marginBottom:8, color:'var(--text)' }}>One tap to get started</div>
+          <div style={{ color:'var(--muted)', fontSize:14, marginBottom:28, lineHeight:1.6 }}>
+            No password needed. Sign in with your Google account — it's instant and secure.
+          </div>
 
-            {/* Email not verified banner */}
-            {notVerified && (
-              <div style={{ background:'rgba(251,191,36,0.1)', border:'1px solid #fbbf24', borderRadius:8, padding:'12px 14px', fontSize:13, color:'#fbbf24', marginBottom:16 }}>
-                <div style={{ fontWeight:600, marginBottom:6 }}>📧 Email not verified</div>
-                <div style={{ marginBottom:10 }}>Check your inbox and click the verification link before logging in.</div>
-                {resent
-                  ? <div style={{ color:'#6ee7b7', fontWeight:600 }}>✓ Verification email resent!</div>
-                  : <button type="button" onClick={handleResend}
-                      style={{ background:'#fbbf24', color:'#000', border:'none', borderRadius:6, padding:'5px 12px', fontSize:12, fontWeight:600, cursor:'pointer' }}>
-                      Resend verification email
-                    </button>
-                }
-              </div>
+          <button onClick={handleGoogle} disabled={loading}
+            style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:12, background:'#fff', color:'#1f1f1f', border:'none', borderRadius:10, padding:'13px 20px', fontSize:15, fontWeight:600, cursor:loading?'not-allowed':'pointer', opacity:loading?0.7:1, transition:'transform 0.15s, box-shadow 0.15s', boxShadow:'0 2px 8px rgba(0,0,0,0.3)' }}
+            onMouseEnter={e=>{ e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 6px 20px rgba(0,0,0,0.4)' }}
+            onMouseLeave={e=>{ e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow='0 2px 8px rgba(0,0,0,0.3)' }}>
+            {loading ? (
+              <span>Signing in...</span>
+            ) : (
+              <>
+                {/* Google G icon */}
+                <svg width="20" height="20" viewBox="0 0 48 48">
+                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                  <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                  <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                  <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                  <path fill="none" d="M0 0h48v48H0z"/>
+                </svg>
+                Continue with Google
+              </>
             )}
+          </button>
 
-            {error && (
-              <div style={{ background:'rgba(248,113,113,0.1)', border:'1px solid #f87171', borderRadius:8, padding:'10px 14px', fontSize:13, color:'#f87171', marginBottom:16 }}>
-                {error}
-              </div>
-            )}
+          {error && (
+            <div style={{ marginTop:16, background:'rgba(248,113,113,0.1)', border:'1px solid #f87171', borderRadius:8, padding:'10px 14px', fontSize:13, color:'#f87171' }}>
+              {error}
+            </div>
+          )}
 
-            <button type="submit" disabled={loading}
-              style={{ width:'100%', background:'var(--accent)', color:'var(--bg)', border:'none', borderRadius:8, padding:12, fontSize:14, fontWeight:700, cursor:loading?'not-allowed':'pointer', opacity:loading?0.6:1, fontFamily:'DM Sans, sans-serif' }}>
-              {loading ? 'Signing in...' : 'Sign In →'}
-            </button>
-          </form>
+          <div style={{ marginTop:20, fontSize:12, color:'var(--muted)', lineHeight:1.6 }}>
+            🔒 We only access your name and email.<br />No posting, no contacts, no data selling.
+          </div>
         </div>
 
-        <div style={{ textAlign:'center', marginTop:20, fontSize:14, color:'var(--muted)' }}>
-          Don't have an account?{' '}
-          <Link href="/signup" style={{ color:'var(--accent)', textDecoration:'none', fontWeight:600 }}>Sign up free</Link>
+        <div style={{ textAlign:'center', marginTop:20, fontSize:13, color:'var(--muted)' }}>
+          <Link href="/" style={{ color:'var(--accent)', textDecoration:'none' }}>← Back to home</Link>
         </div>
       </div>
     </div>
