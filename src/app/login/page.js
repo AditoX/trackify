@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { signInWithGoogle, getGoogleRedirectResult } from '../../lib/firebase'
+import { signInWithGoogle, onAuthChange, getGoogleRedirectResult } from '../../lib/firebase'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -10,26 +10,26 @@ export default function LoginPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    getGoogleRedirectResult()
-      .then(user => {
-        if (user) router.push('/dashboard')
-        else setLoading(false)
-      })
-      .catch(err => {
-        console.error(err)
-        setError('Sign in failed. Please try again.')
+    // First handle any pending redirect result
+    getGoogleRedirectResult().catch(() => {})
+
+    // Then just listen for auth state — if user exists, go to dashboard
+    const unsub = onAuthChange(user => {
+      if (user) {
+        router.push('/dashboard')
+      } else {
         setLoading(false)
-      })
+      }
+    })
+    return unsub
   }, [])
 
   const handleGoogle = async () => {
     setError('')
-    setLoading(true)
     try {
-      await signInWithGoogle()
+      await signInWithGoogle() // redirects away
     } catch (err) {
       setError('Sign in failed. Please try again.')
-      setLoading(false)
     }
   }
 
