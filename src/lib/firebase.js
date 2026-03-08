@@ -1,11 +1,11 @@
 import { initializeApp, getApps } from 'firebase/app'
 import {
   getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged,
-  updateProfile,
   browserLocalPersistence,
   setPersistence,
 } from 'firebase/auth'
@@ -26,33 +26,37 @@ const firebaseConfig = {
   appId:             process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
-// Prevent duplicate app init in Next.js hot reload
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
 
 export const auth = getAuth(app)
 export const db   = getFirestore(app)
 
-// Keep user logged in across browser sessions
 setPersistence(auth, browserLocalPersistence)
+
+const provider = new GoogleAuthProvider()
 
 // ── AUTH ─────────────────────────────────────────────────
 
-export async function signUp(name, email, password) {
-  const cred = await createUserWithEmailAndPassword(auth, email, password)
-  await updateProfile(cred.user, { displayName: name })
-  // Create user doc in Firestore
-  await setDoc(doc(db, 'users', cred.user.uid), {
-    name,
-    email,
-    createdAt: serverTimestamp(),
-    state: null,
-  })
-  return cred.user
+export async function signInWithGoogle() {
+  await signInWithRedirect(auth, provider)
 }
 
-export async function logIn(email, password) {
-  const cred = await signInWithEmailAndPassword(auth, email, password)
-  return cred.user
+export async function getGoogleRedirectResult() {
+  const result = await getRedirectResult(auth)
+  if (!result) return null
+  const user = result.user
+  const ref = doc(db, 'users', user.uid)
+  const snap = await getDoc(ref)
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+      createdAt: serverTimestamp(),
+      state: null,
+    })
+  }
+  return user
 }
 
 export async function logOut() {
