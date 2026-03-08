@@ -92,7 +92,11 @@ export default function Dashboard() {
   useEffect(() => {
     const unsub = onAuthChange(async (u) => {
       setAuthReady(true)
-      if (!u) { router.push('/login'); return }
+      if (!u) {
+        // Small delay to let Firebase finish restoring session from redirect
+        setTimeout(() => router.push('/login'), 1500)
+        return
+      }
       setUser(u)
       const saved = await loadUserData(u.uid)
       const today = new Date().toDateString()
@@ -720,7 +724,7 @@ export default function Dashboard() {
             <div style={{fontSize:15,fontWeight:600,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{user?.displayName || 'User'}</div>
             <div style={{fontSize:12,color:'var(--muted)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{user?.email}</div>
           </div>
-          <button onClick={async()=>{await logOut();router.push('/')}} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16}} title="Logout">→</button>
+          <button onClick={async()=>{await logOut();router.push('/')}} style={{background:'rgba(248,113,113,0.1)',border:'1px solid rgba(248,113,113,0.25)',color:'#f87171',cursor:'pointer',fontSize:12,fontWeight:600,padding:'5px 10px',borderRadius:6,whiteSpace:'nowrap'}} title="Log out">Log out</button>
         </div>
       </nav>
 
