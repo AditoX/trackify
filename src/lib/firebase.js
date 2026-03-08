@@ -3,7 +3,6 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithRedirect,
-  getRedirectResult,
   signOut,
   onAuthStateChanged,
   browserLocalPersistence,
@@ -27,7 +26,6 @@ const firebaseConfig = {
 }
 
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
-
 export const auth = getAuth(app)
 export const db   = getFirestore(app)
 
@@ -35,28 +33,8 @@ setPersistence(auth, browserLocalPersistence)
 
 const provider = new GoogleAuthProvider()
 
-// ── AUTH ─────────────────────────────────────────────────
-
 export async function signInWithGoogle() {
   await signInWithRedirect(auth, provider)
-}
-
-export async function getGoogleRedirectResult() {
-  const result = await getRedirectResult(auth)
-  if (!result) return null
-  const user = result.user
-  const ref = doc(db, 'users', user.uid)
-  const snap = await getDoc(ref)
-  if (!snap.exists()) {
-    await setDoc(ref, {
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-      createdAt: serverTimestamp(),
-      state: null,
-    })
-  }
-  return user
 }
 
 export async function logOut() {
@@ -66,8 +44,6 @@ export async function logOut() {
 export function onAuthChange(callback) {
   return onAuthStateChanged(auth, callback)
 }
-
-// ── FIRESTORE DATA ────────────────────────────────────────
 
 export async function loadUserData(uid) {
   const snap = await getDoc(doc(db, 'users', uid))

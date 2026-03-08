@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { signInWithGoogle, onAuthChange, getGoogleRedirectResult } from '../../lib/firebase'
+import { signInWithGoogle, onAuthChange } from '../../lib/firebase'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -10,10 +10,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    // First handle any pending redirect result
-    getGoogleRedirectResult().catch(() => {})
-
-    // Then just listen for auth state — if user exists, go to dashboard
+    // Simply listen for auth state — works for both redirect and fresh logins
     const unsub = onAuthChange(user => {
       if (user) {
         router.push('/dashboard')
@@ -27,7 +24,7 @@ export default function LoginPage() {
   const handleGoogle = async () => {
     setError('')
     try {
-      await signInWithGoogle() // redirects away
+      await signInWithGoogle()
     } catch (err) {
       setError('Sign in failed. Please try again.')
     }
@@ -37,7 +34,7 @@ export default function LoginPage() {
     <div style={{ minHeight:'100vh', background:'var(--bg)', display:'flex', alignItems:'center', justifyContent:'center' }}>
       <div style={{ textAlign:'center' }}>
         <div style={{ fontFamily:'Bebas Neue', fontSize:28, color:'var(--accent)', letterSpacing:2, marginBottom:10 }}>TRACKIFY</div>
-        <div style={{ color:'var(--muted)', fontSize:13 }}>Signing you in...</div>
+        <div style={{ color:'var(--muted)', fontSize:13 }}>Loading...</div>
       </div>
     </div>
   )
