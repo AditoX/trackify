@@ -114,8 +114,8 @@ export default function Home() {
         <div style={{ maxWidth:1100, margin:'0 auto', padding:'0 24px', height:64, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ fontFamily:'Bebas Neue', fontSize:24, letterSpacing:2, color:c.accent }}>TRACKIFY</div>
           <div style={{ display:'flex', gap:16, alignItems:'center' }}>
-            <Link href="/login" className="nav-link">Login</Link>
-            <Link href="/signup" className="cta-btn" style={{ padding:'8px 22px', fontSize:14 }}>Get Started Free</Link>
+            
+            <Link href="/login" className="cta-btn" style={{ padding:'8px 22px', fontSize:14 }}>Get Started Free</Link>
           </div>
         </div>
       </nav>
@@ -133,8 +133,8 @@ export default function Home() {
           Trackify helps you build habits, crush daily challenges, and track your fitness — all in one free app built for India.
         </p>
         <div className="hero-btns" style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
-          <Link href="/signup" className="cta-btn">Start for Free →</Link>
-          <Link href="/login" className="ghost-btn">I have an account</Link>
+          <Link href="/login" className="cta-btn">Start for Free →</Link>
+          
         </div>
         <p className="hero-sub" style={{ fontSize:13, color:c.muted, marginTop:18 }}>No credit card · No downloads · Works in your browser</p>
       </section>
@@ -203,7 +203,7 @@ export default function Home() {
             READY TO <span style={{ color:c.accent }}>START?</span>
           </h2>
           <p style={{ color:c.muted, fontSize:17, marginBottom:36 }}>Free forever. No excuses.</p>
-          <Link href="/signup" className="cta-btn" style={{ fontSize:17, padding:'18px 48px' }}>
+          <Link href="/login" className="cta-btn" style={{ fontSize:17, padding:'18px 48px' }}>
             Create Free Account →
           </Link>
         </div>
